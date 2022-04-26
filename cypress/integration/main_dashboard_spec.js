@@ -71,4 +71,22 @@ describe('Main dashboard user flow', () => {
     .get('.url').last().find('.long-url').contains('https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
   });
 
+  it('should display an error message if the server is down', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', {
+      statusCode: 500
+    }).as('500 error')
+    cy.visit('http://localhost:3000/')
+    .get('.error-msg').contains('Something went wrong! Please try again.')
+  });
+
+  it('should display an error message for 4xx errors', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', {
+      statusCode: 422
+    }).as('422 error')
+    cy.visit('http://localhost:3000/')
+    .get('.error-msg').contains('Something went wrong! Please try again.')
+  });
+
+
+
 })
