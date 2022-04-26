@@ -28,6 +28,16 @@ const postShortenedUrls = () => {
   }
 }
 
+const getUrlsAgain = () => {
+  return {
+    statusCode: 200,
+    ok: true,
+    body: {
+      urls: []
+    }
+  }
+}
+
 
 describe('Main dashboard user flow', () => {
 
@@ -88,5 +98,15 @@ describe('Main dashboard user flow', () => {
   });
 
 
+  it('should be able to DELETE a URL', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', getShortenedUrls()).as('getUrls')
+    cy.visit('http://localhost:3000/')
+    .get('.title-input').type('Cute Parrot')
+    .get('.url-input').type('https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+    cy.intercept('POST', 'http://localhost:3001/api/v1/urls', postShortenedUrls()).as('postUrls')
+    .get('.submit').click()
+    .get('.url').last().find('.delete-btn').click()
+    .get('.url').should('have.length', 1)
+  });
 
 })
