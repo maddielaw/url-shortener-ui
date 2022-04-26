@@ -9,7 +9,6 @@ export const getUrls = () => {
       })
 }
 
-
 export const postUrls = (newUrl) => {
   return fetch('http://localhost:3001/api/v1/urls', {
     method: "POST",
@@ -22,4 +21,12 @@ export const postUrls = (newUrl) => {
       return response.json()
     }
   })
+}
+
+export const deleteUrls = (urlID) => {
+  return fetch(`http://localhost:3001/api/v1/urls/${urlID}`, {
+    method: "DELETE",
+    headers: {"Content-Type": "application/json"}
+  })
+  .then(response => response.text())
 }
