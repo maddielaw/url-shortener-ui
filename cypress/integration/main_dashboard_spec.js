@@ -28,6 +28,7 @@ const postShortenedUrls = () => {
   }
 }
 
+
 describe('Main dashboard user flow', () => {
 
   it('should display the page title and existing shortened URLs', () => {
@@ -50,7 +51,24 @@ describe('Main dashboard user flow', () => {
     .get('.submit').contains('Shorten Please!')
   });
 
+  it('should be able to fill out all input fields', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', getShortenedUrls()).as('getUrls')
+    cy.visit('http://localhost:3000/')
+    .get('.title-input').type('Cute Parrot').should('have.attr', 'value').should('eq', 'Cute Parrot')
+    .get('.url-input').type('https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+    .get('.url-input').should('have.attr', 'value').should('eq', 'https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+  });
 
-
+  it('should be able to POST a new shortened URL', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', getShortenedUrls()).as('getUrls')
+    cy.visit('http://localhost:3000/')
+    .get('.title-input').type('Cute Parrot')
+    .get('.url-input').type('https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+    cy.intercept('POST', 'http://localhost:3001/api/v1/urls', postShortenedUrls()).as('postUrls')
+    .get('.submit').click()
+    .get('.url').last().find('.url-title').contains('Cute Parrot')
+    .get('.url').last().find('.short-url').contains('http://localhost:3001/useshorturl/2')
+    .get('.url').last().find('.long-url').contains('https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+  });
 
 })
