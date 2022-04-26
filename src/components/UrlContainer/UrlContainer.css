@@ -5,3 +5,13 @@
   padding: 5px;
   background-color: #FFF;
 }
+
+.btn-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.url-title {
+  margin: 5px;;
+}
