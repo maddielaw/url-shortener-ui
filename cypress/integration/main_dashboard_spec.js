@@ -39,6 +39,18 @@ describe('Main dashboard user flow', () => {
     .get('.url').first().find('.long-url').contains('https://images.unsplash.com/photo-1531898418865-480b7090470f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80')
   });
 
+  it('should display the shortener form with proper inputs', () => {
+    cy.intercept('GET', 'http://localhost:3001/api/v1/urls', getShortenedUrls()).as('getUrls')
+    cy.visit('http://localhost:3000/')
+    .get('.form').within(() => {
+      cy.get('input:invalid').should('have.length', 2)
+    })
+    .get('.title-input').should('have.attr', 'placeholder').should('eq', 'Title...')
+    .get('.url-input').should('have.attr', 'placeholder').should('eq', 'URL to Shorten...')
+    .get('.submit').contains('Shorten Please!')
+  });
+
+
 
 
 })
