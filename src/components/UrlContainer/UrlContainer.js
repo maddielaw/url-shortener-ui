@@ -11,7 +11,9 @@ const UrlContainer = props => {
   const urlEls = props.urls.map(url => {
     return (
       <div className="url" id={url.id} key={url.id}>
-        <button className='delete-btn' onClick={() => removeUrl(url.id)}>X</button>
+        <div className='btn-container'>
+          <button className='delete-btn' onClick={() => removeUrl(url.id)}>X</button>
+        </div>
         <h3 className='url-title'>{url.title}</h3>
         <a href={url.short_url} className='short-url' target="blank">{url.short_url}</a>
         <p className='long-url'>{url.long_url}</p>
@@ -21,7 +23,7 @@ const UrlContainer = props => {
 
   return (
     <section className='url-container'>
-      { urlEls.length ? urlEls : <p>No urls yet! Find some to shorten!</p> }
+      { urlEls.length ? urlEls : <p className='no-urls-yet'>No urls yet! Find some to shorten!</p> }
     </section>
   )
 }
