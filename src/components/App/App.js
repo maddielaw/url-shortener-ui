@@ -39,7 +39,7 @@ export class App extends Component {
         <header>
           <h1 className='page-title'>URL Shortener</h1>
           <UrlForm submitNewUrl={this.submitNewUrl} />
-          {this.state.getError && <p>Something went wrong: {this.state.getError}</p>}
+          {this.state.getError && <p className='error-msg'>{this.state.getError}</p>}
         </header>
 
         <UrlContainer urls={this.state.urls}/>
